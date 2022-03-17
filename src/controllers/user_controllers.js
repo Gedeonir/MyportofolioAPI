@@ -182,4 +182,4 @@ const deleteallUsers =async(req,res)=>{
 }
 }
 
-export {createUser,login,getOneUser,getAllUsers,updateUser,deleteUser,deleteallUsers}
+export {homepage,createUser,login,getOneUser,getAllUsers,updateUser,deleteUser,deleteallUsers}
