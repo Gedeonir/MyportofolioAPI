@@ -5,10 +5,6 @@ import config from '../../config.js'
 
 const {secret} = config 
 
-const homepage = (req,res)=>{
-  res.status(200).json({message:'hey welcome to my API'})
-}
-
 
 const createUser =(req,res)=>{
   let responseObject;
@@ -182,4 +178,4 @@ const deleteallUsers =async(req,res)=>{
 }
 }
 
-export {homepage,createUser,login,getOneUser,getAllUsers,updateUser,deleteUser,deleteallUsers}
+export {createUser,login,getOneUser,getAllUsers,updateUser,deleteUser,deleteallUsers}
