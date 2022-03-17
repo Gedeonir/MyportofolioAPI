@@ -1,3 +1,4 @@
 node_modules
 .env
 Don't forget to delete delete all endpoints
+src/tests
