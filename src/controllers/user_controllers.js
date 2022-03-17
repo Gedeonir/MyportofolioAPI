@@ -6,7 +6,7 @@ import config from '../../config.js'
 const {secret} = config 
 
 const homepage = (req,res)=>{
-  res.json({message:'hey welcome to my API'})
+  res.status(200).json({message:'hey welcome to my API'})
 }
 
 
