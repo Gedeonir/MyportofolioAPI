@@ -27,6 +27,6 @@ app.use(commentRouter)
 
 
 
-app.listen(port,() =>console.log(`App listening on http://localhost:${port}`)) 
+app.listen(port||5000,() =>console.log(`App listening on http://localhost:${port}`)) 
 
 export {app as default}
