@@ -9,7 +9,6 @@ router.get('/skills', getAllskill);
 router.get('/skills/:id',readskill);
 router.put('/skills/updateskill/:id',verifyToken,updateskill);
 router.delete('/skills/deleteskill/:id',verifyToken,deleteskill);
-router.delete('/skills/deleteallskills/',verifyToken,deleteallskills); 
 
 
 export{router as default}

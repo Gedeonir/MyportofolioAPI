@@ -9,7 +9,6 @@ router.post('/messages/createmessage',messagesValidator,createmessage);
 router.get('/messages', verifyToken,getAllmessage);
 router.get('/messages/:id',verifyToken,readmessage);
 router.delete('/messages/deletemessage/:id',verifyToken,deletemessage);
-router.delete('/messages/deleteallmessages/',verifyToken,deleteallmessages);
 
 
 

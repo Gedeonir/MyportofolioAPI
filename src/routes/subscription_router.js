@@ -8,7 +8,7 @@ router.post('/subscriptions/createsubscription',createsubscription);
 router.get('/subscriptions', verifyToken,getAllsubscription);
 router.get('/subscriptions/:id',readsubscription);
 router.delete('/subscriptions/deletesubscription/:id',deletesubscription);
-router.delete('/subscriptions/deleteallsubscriptions',verifyToken,deleteallsubscriptions);
+
 
 
 

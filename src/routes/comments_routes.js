@@ -8,7 +8,5 @@ router.post('/blogs/:blogid/sendcomment',verifyToken, commentValidator,createcom
 router.get('/blogs/:blogid/comments', getAllblogcomment);
 router.put('/blogs/:blogid/updatecomment/:id',verifyToken,updatecomment);
 router.delete('/blogs/:blogid/deletecomment/:id',verifyToken,deletecomment);
-router.delete('/blogs/:blogid/deleteallcomments/',verifyToken,deleteallcomments);
-
 
 export{router as default}

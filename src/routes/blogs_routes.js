@@ -10,7 +10,6 @@ router.get('/blogs', getAllblog);
 router.get('/blogs/:id',readBlog);
 router.put('/blogs/updateblog/:id', verifyToken,updateBlog);
 router.delete('/blogs/deleteblog/:id',verifyToken,deleteBlog);
-router.delete('/blogs/deleteallblog/',verifyToken,deleteallBlogs); 
 
 
 export{router as default}

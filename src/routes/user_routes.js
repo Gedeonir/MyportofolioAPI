@@ -14,7 +14,7 @@ router.get('/users/:id', verifyToken,getOneUser);
 router.put('/users/update/:id',verifyToken,updateUser);
 
 router.delete('/users/delete/:id',verifyToken,deleteUser);
-router.delete('/users/deleteallusers/',verifyToken,deleteallUsers);
-router.post('/login',login)
+
+router.post('/login',login);
 
 export {router as default};
