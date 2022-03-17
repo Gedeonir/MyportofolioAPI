@@ -1,9 +1,8 @@
 import messageModel from "../schemas/messageSchema.js"
 import jwt from 'jsonwebtoken'
-import dotenv from "dotenv"
-dotenv.config()
+import config from '../../config.js'
 
-const secerete = process.env.JWT_SECRET
+const {secret} = config 
 
 const createmessage = async(req, res) => {
     try {
@@ -35,7 +34,7 @@ const readmessage = async(req,res)=>{
 
   const token = await req.headers['authorization'].split(' ')[1]; 
  
-  const user = jwt.verify(token,secerete); 
+  const user = jwt.verify(token,secret); 
   if (user.user.role != 'admin') {
     return res.status(401).json({Error:"Access denied,you need to login as admin"})
   }else{
@@ -55,7 +54,7 @@ const getAllmessage =  async(req,res)=>{
   
   const token = await req.headers['authorization'].split(' ')[1]; 
  
-  const user = jwt.verify(token,secerete); 
+  const user = jwt.verify(token,secret); 
   if (user.user.role != 'admin') {
     return res.status(401).json({Error:"Access denied,you need to login as admin"})
   }else{
@@ -77,7 +76,7 @@ const deletemessage =async(req,res)=>{
   const id = req.params.id;
   const token = await req.headers['authorization'].split(' ')[1]; 
  
-  const user = jwt.verify(token,secerete); 
+  const user = jwt.verify(token,secret); 
   if (user.user.role != 'admin') {
     return res.status(401).json({Error:"Access denied,you need to login as admin"})
   }else{
@@ -96,7 +95,7 @@ const deletemessage =async(req,res)=>{
 const deleteallmessages =async(req,res)=>{
   const token = await req.headers['authorization'].split(' ')[1]; 
  
-  const user = jwt.verify(token,secerete); 
+  const user = jwt.verify(token,secret); 
   if (user.user.role != 'admin') {
     return res.status(401).json({Error:"Access denied,you need to login as admin"})
   }else{ 

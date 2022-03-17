@@ -2,18 +2,22 @@ import request from 'supertest'
 import app from '..'
 import mongoose from 'mongoose'
 import jwt from 'jsonwebtoken'
-import dotenv from 'dotenv'
+
 import userModel from '../schemas/userSchema.js'
 import { token } from 'morgan'
+import users from '../schemas/userSchema.js'
+
+import config from '../../config.js'
+
+const {secret} = config 
 
 
-dotenv.config()
 
-const secerete = process.env.JWT_SECRET
 
 describe('user tests',()=>{
     describe('test signup',()=>{
         let user, res;
+
         it('should not send empty firstname field',async()=>{
 
             user ={
@@ -164,7 +168,7 @@ describe('user tests',()=>{
 
         it('should signup unique user', async()=>{
           
-            user ={
+            user = await{
                 firstname:"gedeon",
                 lastname:"gedeon",
                 contact:"0000000000",
@@ -182,19 +186,19 @@ describe('user tests',()=>{
         
         }, 500000)
 
+        let token;
         it('should login existing user login', async()=>{
 
 
             user ={
                 email:"irafasha1000@gmail.com",
                 password:"passwords",
-                token:jwt.sign(user,secerete)
             };
-           
+            token=jwt.sign(user,secret)
             res= await request(app)
             .post('/users/login')
             .send(user)
-            expect(res.body.token).toBe()
+            expect(res.body.message).toContain('Welcome')
         
         }, 500000)
     })

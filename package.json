@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node src/",
+    "start": "node src/index.js",
     "start:dev": "nodemon src/",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
+    "test": " node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
     "dev": "nodemon index.js"
   },
   "type": "module",

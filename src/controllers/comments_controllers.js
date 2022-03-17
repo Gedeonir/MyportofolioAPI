@@ -1,19 +1,15 @@
 import blogs from "../schemas/blogsSchema.js"
 import commentModel from "../schemas/CommentSchema.js"
 import jwt from 'jsonwebtoken'
-import dotenv from 'dotenv'
+import config from '../../config.js'
 
-
-dotenv.config()
-
-const secerete = process.env.JWT_SECRET
-
+const {secret} = config 
 
 const createcomment = async(req,res)=>{
   const blogid =req.params.blogid
   const token = req.headers.authorization.split(' ')[1]; 
  
-  const user = jwt.verify(token,secerete); 
+  const user = jwt.verify(token,secret); 
   if (user) {
     try {
       const blog = await blogs.findById(blogid)
@@ -69,7 +65,7 @@ const getAllblogcomment =  async(req,res)=>{
 const updatecomment = async(req,res)=>{
   const token = req.headers.authorization.split(' ')[1]; 
  
-  const user = jwt.verify(token,secerete); 
+  const user = jwt.verify(token,secret); 
   if (user) {
  
     const blogid = req.params.blogid
@@ -100,7 +96,7 @@ const deletecomment =async(req,res)=>{
   const blogid = req.params.blogid
   const token = req.headers.authorization.split(' ')[1]; 
  
-  const user = jwt.verify(token,secerete); 
+  const user = jwt.verify(token,secret); 
   if (user) {
 
     const comments = await commentModel.findOne({blogid: blogid}).sort({time:-1})
@@ -133,7 +129,7 @@ const deleteallcomments =async(req,res)=>{
 
   const token = req.headers.authorization.split(' ')[1]; 
  
-  const user = jwt.verify(token,secerete); 
+  const user = jwt.verify(token,secret); 
   if (user.user.role !='admin') {
     return res.status(401).json({Error:"Access denied,you need to login as admin"})
   }else{

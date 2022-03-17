@@ -6,21 +6,16 @@ import projectRouter from "./routes/project_routes.js"
 import subscriptionsRouter from "./routes/subscription_router.js"
 import skillRouter from "./routes/skills_routes.js"
 import commentRouter from "./routes/comments_routes.js"
-import mongoose from "mongoose" 
-import dotenv from "dotenv"
-import helmet from 'helmet'
-import morgan from 'morgan'
+import config from '../config.js'
+import mongoose from "mongoose";
 
-dotenv.config()
-const port = process.env.PORT
- 
-mongoose.connect(process.env.mongoUrl).then(console.log("database connected "))
+
+const {port,database} = config
+mongoose.connect(database).then(console.log("database connected "))
 
 const app = express();
 
 app.use(express.json())
-app.use(helmet())
-app.use(morgan('combined'))
 app.use(userRouter)
 app.use(blogRouter) 
 app.use(messageRouter)

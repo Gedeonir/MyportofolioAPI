@@ -1,17 +1,14 @@
 import projectsModel from "../schemas/projectSchema.js"
 import jwt from 'jsonwebtoken'
-import dotenv from 'dotenv'
+import config from '../../config.js'
 
-
-dotenv.config()
-
-const secerete = process.env.JWT_SECRET
+const {secret} = config 
 
 
 const createproject = async(req,res)=>{
   const token = req.headers.authorization.split(' ')[1]; 
  
-  const user = jwt.verify(token,secerete); 
+  const user = jwt.verify(token,secret); 
   if (user.user.role != 'admin') {
     return res.status(401).json({Error:"Access denied,you need to login as admin"})
   }else{
@@ -65,7 +62,7 @@ const updateproject = async(req,res)=>{
     const projectid = req.params.id;
     const token = req.headers.authorization.split(' ')[1]; 
    
-    const user = jwt.verify(token,secerete); 
+    const user = jwt.verify(token,secret); 
     if (user.user.role != 'admin') {
       return res.status(401).json({Error:"Access denied,you need to login as admin"})
     }else{
@@ -88,7 +85,7 @@ const deleteproject =async(req,res)=>{
   const projectid = req.params.id
   const token = req.headers.authorization.split(' ')[1]; 
  
-  const user = jwt.verify(token,secerete); 
+  const user = jwt.verify(token,secret); 
   if (user.user.role != 'admin') {
     return res.status(401).json({Error:"Access denied,you need to login as admin"})
   }else{
@@ -106,7 +103,7 @@ const deleteproject =async(req,res)=>{
 const deleteallprojects =async(req,res)=>{ 
   const token = req.headers.authorization.split(' ')[1]; 
  
-  const user = jwt.verify(token,secerete); 
+  const user = jwt.verify(token,secret); 
   if (user.user.role != 'admin') {
     return res.status(401).json({Error:"Access denied,you need to login as admin"})
   }else{

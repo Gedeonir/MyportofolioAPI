@@ -1,16 +1,13 @@
 import blogsModel from "../schemas/blogsSchema.js"
 import jwt from 'jsonwebtoken'
-import dotenv from 'dotenv'
+import config from '../../config.js'
 
-
-dotenv.config()
-
-const secerete = process.env.JWT_SECRET
+const {secret} = config 
 
 const createBlog = async(req,res)=>{
   const token = req.headers.authorization.split(' ')[1];  
   
-  const user = jwt.verify(token,secerete); 
+  const user = jwt.verify(token,secret); 
   if (user.user.role != 'admin') {
     return res.status(401).json({Error:"Access denied,you need to login as admin"})
   }else{
@@ -70,7 +67,7 @@ const updateBlog = async(req,res)=>{
 
   const token = req.headers['authorization'].split(' ')[1];
 
-  const user =jwt.verify(token,secerete)
+  const user =jwt.verify(token,secret)
   if (user.user.role != 'admin') { 
     return res.status(401).json({Error:"Access denied,you need to login as admin"})
   }else{
@@ -101,7 +98,7 @@ const deleteBlog =async(req,res)=>{
   const blogid = req.params.id
   const token = req.headers.authorization.split(' ')[1]; 
 
-  const user = jwt.verify(token,secerete); 
+  const user = jwt.verify(token,secret); 
   if (user.user.role != 'admin') {
     return res.status(401).json({Error:"Access denied,you need to login as admin"})
   }else{ 
@@ -125,7 +122,7 @@ const deleteallBlogs =async(req,res)=>{
   const token = req.headers.authorization.split(' ')[1];
 
 
-  const user = jwt.verify(token,secerete); 
+  const user = jwt.verify(token,secret); 
   if (user.user.role != 'admin') {
     return res.status(401).json({Error:"Access denied,you need to login as admin"})
   }else{

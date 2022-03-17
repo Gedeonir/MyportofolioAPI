@@ -1,12 +1,14 @@
 import userModel from "../schemas/userSchema.js"
 import jwt from 'jsonwebtoken'
-import dotenv from 'dotenv'
 import bcrypt from 'bcrypt'
+import config from '../../config.js'
 
+const {secret} = config 
 
-dotenv.config()
+const homepage = (req,res)=>{
+  res.json({message:'hey welcome to my API'})
+}
 
-const secerete = process.env.JWT_SECRET
 
 const createUser =(req,res)=>{
   let responseObject;
@@ -57,7 +59,7 @@ const login = async(req,res)=>{
       status=500;
     }
     if (verified) {
-      const token = jwt.sign({user:user},secerete, { expiresIn: 60*60});
+      const token = jwt.sign({user:user},secret, { expiresIn: 60*60});
       responseObject = {message:`Welcome ${user.firstname} ${user.lastname}`,token};
       status=200;
     } else {
@@ -74,7 +76,7 @@ const getOneUser = async(req,res)=>{
 
   const token = await req.headers['authorization'].split(' ')[1];
 
-  const user =jwt.verify(token,secerete)
+  const user =jwt.verify(token,secret)
   if (user.user.role != 'admin') { 
     return res.status(401).json({Error:"Access denied,you need to login as admin"})
   }else{
@@ -97,7 +99,7 @@ const getOneUser = async(req,res)=>{
 const getAllUsers =  async(req,res)=>{
   const token = await req.headers['authorization'].split(' ')[1];
 
-  const user =jwt.verify(token,secerete)
+  const user =jwt.verify(token,secret)
   if (user.user.role != 'admin') { 
     return res.status(401).json({Error:"Access denied,you need to login as admin"})
   }else{
@@ -122,7 +124,7 @@ const updateUser = async(req,res)=>{
 
   const token = await req.headers['authorization'].split(' ')[1];
 
-  const user =jwt.verify(token,secerete)
+  const user =jwt.verify(token,secret)
   if (user.user.role != 'admin') { 
     return res.status(401).json({Error:"Access denied,you need to login as admin"})
   }else{
@@ -146,7 +148,7 @@ const deleteUser =async(req,res)=>{
   const Userid = req.params.id
   const token = req.headers.authorization.split(' ')[1];
 
-  const user = jwt.verify(token,secerete); 
+  const user = jwt.verify(token,secret); 
   if (user.user.role != 'admin') {
     return res.status(401).json({Error:"Access denied,you need to login as admin"})
   }else{
@@ -164,7 +166,7 @@ const deleteallUsers =async(req,res)=>{
   const token = req.headers.authorization.split(' ')[1];
 
  
-  const user = jwt.verify(token,secerete); 
+  const user = jwt.verify(token,secret); 
   if (user.user.role != 'admin') {
     return res.status(401).json({Error:"Access denied,you need to login as admin"})
   }else{
