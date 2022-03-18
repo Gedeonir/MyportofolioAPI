@@ -8,6 +8,8 @@ import skillRouter from "./routes/skills_routes.js"
 import commentRouter from "./routes/comments_routes.js"
 import config from '../config.js'
 import mongoose from "mongoose"
+import cors from 'cors'
+
 
 const {port,database} = config
 mongoose.connect(database).then(console.log("database connected "))
@@ -15,6 +17,7 @@ mongoose.connect(database).then(console.log("database connected "))
 const app = express();
 
 app.use(express.json())
+app.use(cors())
 app.use(userRouter)
 app.use(blogRouter) 
 app.use(messageRouter)
