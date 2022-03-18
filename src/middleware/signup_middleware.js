@@ -14,7 +14,6 @@ const signupValidator = async(req,res,next)=>{
     const data = req.body;
     const user = await userModel.findOne({email: data.email});
     if(user) return res.status(400).json({Error:`${data.email} already exists`})
-
     next() 
 } 
 

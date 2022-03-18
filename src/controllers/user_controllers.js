@@ -10,16 +10,16 @@ const homepage = (req,res)=>{
 }
 
 
-const createUser =(req,res)=>{
+const createUser =async(req,res)=>{
   let responseObject;
   const user = req.body;
-  bcrypt.hash(user.password,10,async(err,hash) =>{
+  bcrypt.hash(user.password,10,(err,hash) =>{
     if (err) {
       responseObject={Error:"Internal error"}      
     } else {
       user.password = hash
       try {
-        const result= await userModel.create({
+        const result= userModel.create({
           firstname:req.body.firstname,
           lastname:req.body.lastname,
           contact: req.body.contact,
