@@ -51,7 +51,7 @@ const login = async(req,res)=>{
 
   const user = await userModel.findOne({email:data.email}).select('+password').exec();
   if (!user) {
-    return res.status(400).json({Error:"invalid email or password"})
+    return res.status(400).json({Error:"invalid email*** or password"})
   }
   bcrypt.compare(data.password,user.password, (err,verified)=>{
     if(err){
