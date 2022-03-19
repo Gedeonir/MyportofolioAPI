@@ -49,9 +49,6 @@ const login = async(req,res)=>{
  
 
   const user = await userModel.findOne({email:req.body.email}).select('+password').exec();
-  if (!user) {
-    return res.status(400).json({Error:"invalid email or password"})
-  }
   bcrypt.compare(req.body.password,user.password, (err,verified)=>{
     if(err){
       responseObject = {Error:"internal Error"};
