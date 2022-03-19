@@ -46,14 +46,13 @@ const createUser =async(req,res)=>{
 
 const login = async(req,res)=>{
   let responseObject,status;  
+ 
 
-  const data = req.body;  
-
-  const user = await userModel.findOne({email:data.email}).select('+password').exec();
+  const user = await userModel.findOne({email:req.body.email}).select('+password').exec();
   if (!user) {
-    return res.status(400).json({Error:"invalid email*** or password"})
+    return res.status(400).json({Error:"invalid email or password"})
   }
-  bcrypt.compare(data.password,user.password, (err,verified)=>{
+  bcrypt.compare(req.body.password,user.password, (err,verified)=>{
     if(err){
       responseObject = {Error:"internal Error"};
       status=500;
