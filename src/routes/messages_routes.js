@@ -5,7 +5,7 @@ import messagesValidator from "../middleware/messages_middleware.js"
 
 const router = express.Router()
 
-router.post('/messages/createmessage',createmessage);
+router.post('/messages/createmessage',messagesValidator,createmessage);
 router.get('/messages', verifyToken,getAllmessage);
 router.get('/messages/:id',verifyToken,readmessage);
 router.delete('/messages/deletemessage/:id',verifyToken,deletemessage);
