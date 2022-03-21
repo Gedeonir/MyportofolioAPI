@@ -4,7 +4,7 @@ const {Schema} = mongoose
 
 const messageSchema = new Schema({
     Firstname:String,
-    Fastname:String,
+    Lastname:String,
     Email:String,
     Message:String,
     Time:{type:Date}
