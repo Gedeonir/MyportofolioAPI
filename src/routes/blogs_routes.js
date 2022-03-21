@@ -5,7 +5,7 @@ import blogValidator from "../middleware/blog_middleware.js"
 
 const router = express.Router()
 
-router.post('/blogs/createBlog',verifyToken,createBlog);
+router.post('/blogs/createBlog',verifyToken,blogValidator,createBlog);
 router.get('/blogs', getAllblog);
 router.get('/blogs/:id',readBlog);
 router.put('/blogs/updateblog/:id', verifyToken,updateBlog);
