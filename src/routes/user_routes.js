@@ -4,7 +4,7 @@ import { verifyToken } from "../middleware/auth.js"
 import signupValidator from "../middleware/signup_middleware.js"
 const router = express.Router();
 
-router.get('/',homepage);
+router.get('/',verifyToken,homepage);
 
 router.post('/newUser',signupValidator,createUser);
 router.get('/users',verifyToken,getAllUsers);
