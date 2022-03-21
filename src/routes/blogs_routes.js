@@ -12,4 +12,4 @@ router.put('/blogs/updateblog/:id', verifyToken,updateBlog);
 router.delete('/blogs/deleteblog/:id',verifyToken,deleteBlog);
 
 
-export{router as default}
+export{router as default} 

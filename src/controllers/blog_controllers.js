@@ -50,11 +50,9 @@ const readBlog = async(req,res)=>{
 const getAllblog =  async(req,res)=>{
     try {
         const blogs = await blogsModel.find().sort({time:-1})
-        res.status(200).json({
-          message:"blogs fetched succesfully",
-          data:blogs
-    
-        })
+        res.status(200).json(
+          blogs
+        )
       } catch (error) {
         res.status(409).json({Error:`Unable to fetch blogs`})
         
