@@ -5,8 +5,15 @@ import config from '../../config.js'
 
 const {secret} = config 
 
-const homepage = (req,res)=>{
-  res.status(200).json({message:'hey welcome to my API'})
+const homepage =async (req,res)=>{
+  const token = await req.headers['authorization'].split(' ')[1];
+
+  const user =jwt.verify(token,secret)
+  if (user.user.role != 'admin') { 
+    return res.status(401).json({Error:"Access denied,you need to login as admin"})
+  }else{ 
+    res.status(200).json({message:'hey welcome to my API',user:user})
+  } 
 }
 
 
