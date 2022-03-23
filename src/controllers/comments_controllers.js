@@ -26,7 +26,7 @@ const createcomment = async(req,res)=>{
 
       })
       const blogCommentsCount = await commentModel.find({blogid:blogid}).count()
-      const updateBlog = await blogs.find({blogid:blogid}).update({comments:blogCommentsCount})
+      const updateBlog = await blogs.findById(blogid).update({comments:blogCommentsCount})
       console.log(blogCommentsCount,updateBlog)
     } catch (error) {
       res.status(409).json({Error:`unable to send comment, blog may have been deleted`}) 
@@ -41,7 +41,7 @@ const createcomment = async(req,res)=>{
 const getAllblogcomment =  async(req,res)=>{
   const blogid =req.params.blogid
   let responseObject,status
-  const blog = await blogs.findById(blogid)
+  const blog = await blogs.findById(blogid) 
   const blogCommentsCount = await commentModel.find({blogid:blogid}).count()
     try {
         const comments = await commentModel.find({blogid: blogid}).sort({time:-1})
