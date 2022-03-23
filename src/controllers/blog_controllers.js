@@ -71,9 +71,8 @@ const updateBlog = async(req,res)=>{
   }else{
 
     try {
-        const singleBlog = await blogsModel.findByIdAndUpdate(blogid,{
-          ...req.body
-        })
+        const blogUpdate = await blogsModel.findById(blogid).update({title:req.body.title,body:req.body.body})
+        const singleBlog = await blogsModel.findById(blogid)
         if (!singleBlog) {
           res.status(409).json({
             message:`blog with ${blogid} id not found`,
