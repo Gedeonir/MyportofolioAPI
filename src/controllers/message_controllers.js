@@ -60,11 +60,10 @@ const getAllmessage =  async(req,res)=>{
   }else{
     try {
         const messagess = await messageModel.find().sort({time:-1})
-        res.status(200).json({
-          message:"messages retrieved succesfully",
-          data:messagess
+        res.status(200).json(
+          messagess
     
-        })
+        )
     } catch (error) {
         res.status(409).json({Error:`Unable to fetch messages`})
         
