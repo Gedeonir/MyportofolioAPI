@@ -8,12 +8,30 @@ const {secret} = config
 const homepage =async (req,res)=>{
   const token = await req.headers['authorization'].split(' ')[1];
 
-  const user =jwt.verify(token,secret)
-  if (user.user.role != 'admin') { 
-    return res.status(401).json({Error:"Access denied,you need to login as admin"})
-  }else{ 
-    res.status(200).json({message:'hey welcome to my API',user:user})
-  } 
+  const user =jwt.verify(token.replace(/^JWT\s/, ''),secret,(error, decoded) =>{
+
+    if(error){
+      if (error.name === 'TokenExpiredError') {
+        return res.status(422).json({Error:'JWT has expired. Please login again'});
+      } 
+      return res.status(422).json({Error:'JWT Verification Error'})
+    }
+    userModel.findById(decoded.sub)
+    .then(user => res.status(201).json({
+        message:'JWT Refreshed',
+        token: `JWT ${generateToken(user)}`,
+        user:setUserInfo(user)
+      }))
+    .catch(error => res.status(401).json({
+      message: 'JWT Refresh Issue.',
+      error
+    }));
+  });
+  // if (user.role != 'admin') { 
+  //   return res.status(401).json({Error:"Access denied,you need to login as admin"})
+  // }else{ 
+  //   res.status(200).json({message:'hey welcome to my API',user:user})
+  // } 
 }
 
 
@@ -86,19 +104,15 @@ const getOneUser = async(req,res)=>{
   if (user.user.role != 'admin') { 
     return res.status(401).json({Error:"Access denied,you need to login as admin"})
   }else{
-     try {
-        const singleUser = userModel.findById(Userid)
-        if(singleUser){
-          res.status(200).json({
-            message:`User ${Userid} fetched succesfully`,
-            data:singleUser
-          })
-        }else{
-          
-        }
+    try {
+      const singleUser = await userModel.findById(Userid)
+      res.status(200).json({
+        message:`User ${Userid} fetched succesfully`,
+        data:singleUser
+      })
     } catch (error) {
         res.status(409).json({Error:`User ${Userid} not found`})
-    }
+      }
   }
 } 
  
@@ -168,24 +182,6 @@ const deleteUser =async(req,res)=>{
     }
   }
 }
-const deleteallUsers =async(req,res)=>{ 
-  const token = req.headers.authorization.split(' ')[1];
 
- 
-  const user = jwt.verify(token,secret); 
-  if (user.user.role != 'admin') {
-    return res.status(401).json({Error:"Access denied,you need to login as admin"})
-  }else{
-  try {
-    const allUser = await userModel.deleteMany() 
-    res.status(200).json({
-      message:`Users deleted succesfully`,
-      data:allUser
-    })
-  } catch (error) {
-    res.status(409).json({Error:`Unable to delete Users`,error})
-  }
-}
-}
 
-export {homepage,createUser,login,getOneUser,getAllUsers,updateUser,deleteUser,deleteallUsers}
+export {homepage,createUser,login,getOneUser,getAllUsers,updateUser,deleteUser}

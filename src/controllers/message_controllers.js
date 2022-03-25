@@ -22,7 +22,6 @@ const createmessage = async(req, res) => {
     
     } catch (error) {
         res.status(409).json({Error:`unable to send message`})
-        console.log(error)
     }
   
   

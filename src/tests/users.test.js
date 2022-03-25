@@ -1,10 +1,9 @@
 import request from 'supertest'
 import app from '..'
-import mongoose from 'mongoose'
+import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
-import userModel from '../schemas/userSchema.js'
-import { token } from 'morgan'
+
 import users from '../schemas/userSchema.js'
 
 import config from '../../config.js'
@@ -17,7 +16,9 @@ const {secret} = config
 describe('user tests',()=>{
     describe('test signup',()=>{
         let user, res;
-
+        beforeEach(async()=>{
+           await users.deleteMany()
+        })
         it('should not send empty firstname field',async()=>{
 
             user ={
@@ -31,7 +32,7 @@ describe('user tests',()=>{
                 role:"admin",
             };
             res= await request(app)
-            .post('/users/newUser')
+            .post('/newUser')
             .send(user)
             expect(res.body.Error).toBe('Firstname can not be empty')
         },50000)
@@ -49,7 +50,7 @@ describe('user tests',()=>{
                 role:"admin",
             };
             res= await request(app)
-            .post('/users/newUser')
+            .post('/newUser')
             .send(user)
             expect(res.body.Error).toBe('Lastname can not be empty')
         },50000)
@@ -67,7 +68,7 @@ describe('user tests',()=>{
                 role:"admin",
             };
             res= await request(app)
-            .post('/users/newUser')
+            .post('/newUser')
             .send(user)
             expect(res.body.Error).toBe('email can not be empty')
         },50000)
@@ -85,7 +86,7 @@ describe('user tests',()=>{
                 role:"admin",
             };
             res= await request(app)
-            .post('/users/newUser')
+            .post('/newUser')
             .send(user)
             expect(res.body.Error).toBe('invalid email')
         },50000)
@@ -104,7 +105,7 @@ describe('user tests',()=>{
                 role:"admin",
             };
             res= await request(app)
-            .post('/users/newUser')
+            .post('/newUser')
             .send(user)
             expect(res.body.Error).toBe('password can not be empty')
         },50000)
@@ -123,7 +124,7 @@ describe('user tests',()=>{
                 role:"admin",
             };
             res= await request(app)
-            .post('/users/newUser')
+            .post('/newUser')
             .send(user)
             expect(res.body.Error).toBe('contact can not be empty')
         },50000)
@@ -142,7 +143,7 @@ describe('user tests',()=>{
                 role:"admin",
             };
             res= await request(app)
-            .post('/users/newUser')
+            .post('/newUser')
             .send(user)
             expect(res.body.Error).toBe('gender can not be empty')
         },50000)
@@ -161,10 +162,11 @@ describe('user tests',()=>{
                 role:"admin",
             };
             res= await request(app)
-            .post('/users/newUser')
+            .post('/newUser')
             .send(user)
             expect(res.body.Error).toBe('username can not be empty')
         },50000)
+
 
         it('should signup unique user', async()=>{
           
@@ -179,14 +181,19 @@ describe('user tests',()=>{
                 role:"admin",
                 time:"2022-03-14T16:51:26.613Z"
             };
+
+
+
             res= await request(app)
-            .post('/users/newUser')
+            .post('/newUser')
+            .set('Content-type', 'application/json')
             .send(user)
             expect(res.body.message).toContain('created succesfully')
         
         }, 500000)
 
         let token;
+
         it('should login existing user login', async()=>{
 
 
@@ -196,111 +203,108 @@ describe('user tests',()=>{
             };
             token=jwt.sign(user,secret)
             res= await request(app)
-            .post('/users/login')
+            .post('/login')
             .send(user)
-            expect(res.body.message).toContain('Welcome')
+            expect(res.body.token)
         
-        }, 500000)
+        }, 500000) 
     })
+
+    
 })
 
 
-
-//messages tests
-
-describe('messages tests',()=>{
-    let message,res, next;
-    it('should not send empty firstname field',async()=>{
-
-        message ={
-            firstname:"",
-            lastname:"gedeon",
-            contact:"00000000",
-            email:"irafasha@gmail.com",
-            message:"hey"
-        };
-        res= await request(app)
-        .post('/messages/createmessage')
-        .send(message)
-        expect(res.body.Error).toBe('Firstname can not be empty')
-    },50000)
-
-
-    it('should not send empty lastname field',async()=>{
-
-        message ={
-            firstname:"gedeon",
-            lastname:"",
-            contact:"00000000",
-            email:"irafasha@gmail.com",
-            message:"hey"
-        };
-        res= await request(app)
-        .post('/messages/createmessage')
-        .send(message)
-        expect(res.body.Error).toBe('Lastname can not be empty')
-    },50000)
-
-         
-    it('should not send empty contact field',async()=>{
-
-        message ={
+describe('CRUD',()=>{
+    let res,token;
+    beforeEach(async()=>{
+        let user = await{
             firstname:"gedeon",
             lastname:"gedeon",
-            contact:"",
-            email:"irafasha@gmail.com",
-            message:"admin",
+            contact:"0000000000",
+            email:"irafasha1000@gmail.com",
+            password:"passwords",
+            gender:"M",
+            username:"gedeon",
+            role:"admin",
+            time:"2022-03-14T16:51:26.613Z"
         };
-        res= await request(app)
-        .post('/users/newUser')
-        .send(message)
-        expect(res.body.Error).toBe('contact can not be empty')
+
+        users.create(user);
+
+        token = jwt.sign({user:user},secret,{ expiresIn: 60*60})
+
     },50000)
+    it('get(/)',async()=>{
+
+        const userToken = jwt.verify(token,secret);
+
+        res= await request(app)
+        .get(`/`)
+        .set('Authorization','Bearer '+ token)
+        .expect(200)
+        .then()
+
     
 
-    it('should not send empty email field',async()=>{
-
-        message ={
-            firstname:"gedeon",
-            lastname:"gedeon",
-            contact:"00000000",
-            email:"",
-            message:"hey"
-        };
-        res= await request(app)
-        .post('/messages/createmessage')
-        .send(message)
-        expect(res.body.Error).toBe('email can not be empty')
     },50000)
 
-    it('should not send empty invalid email',async()=>{
+    it('should get all user',async()=>{
 
-        message ={
-            firstname:"gedeon",
-            lastname:"gedeon",
-            contact:"00000000",
-            email:"irafashagmail.com",
-            message:"hey"
-        };
+        const userToken = jwt.verify(token,secret);
+
         res= await request(app)
-        .post('/messages/createmessage')
-        .send(message)
-        expect(res.body.Error).toBe('invalid email')
+        .get('/users')
+        .set('Authorization','Bearer '+ token)
+        .expect(200)
+        .then(expect(409))
+
+    
+
+    },50000) 
+
+    it('should get one user',async()=>{
+
+        const userid ='62386dbf49019438e678ea20'
+
+        const userToken = jwt.verify(token,secret);
+
+        res= await request(app)
+        .get(`/users/${userid}`)
+        .set('Authorization','Bearer '+ token)
+        .expect(200)
+        .then()
+
+    
+
     },50000)
 
-    it('should not send empty message field',async()=>{
+    it('should delete user',async()=>{
+        const userid ='62386dbf49019438e678ea20'
 
-        message ={
-            firstname:"gedeon",
-            lastname:"gedeon",
-            contact:"00000000",
-            email:"irafasha@gmail.com",
-            message:""
-        };
-        res= await request(app)
-        .post('/messages/createmessage')
-        .send(message)
-        expect(res.body.Error).toBe('message can not be empty')
+        const userToken=jwt.verify(token,secret)
+
+        res=await request(app)
+        .delete(`/users/delete/${userid}`)
+        .set('Authorization','Bearer '+ token)
+        .expect(200)
+        .then()
     },50000)
+
+    it('should update user',async()=>{
+        const userid ='62386dbf49019438e678ea20'
+
+        const userToken=jwt.verify(token,secret)
+
+        res=await request(app)
+        .put(`/users/update/${userid}`)
+        .set('Authorization','Bearer '+ token)
+        .expect(200)
+        .then()
+    },50000)
+
+
+    afterEach(()=>{
+        users.deleteMany()
+    })
+   
 })
-
