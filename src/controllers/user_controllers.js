@@ -8,30 +8,12 @@ const {secret} = config
 const homepage =async (req,res)=>{
   const token = await req.headers['authorization'].split(' ')[1];
 
-  const user =jwt.verify(token.replace(/^JWT\s/, ''),secret,(error, decoded) =>{
-
-    if(error){
-      if (error.name === 'TokenExpiredError') {
-        return res.status(422).json({Error:'JWT has expired. Please login again'});
-      } 
-      return res.status(422).json({Error:'JWT Verification Error'})
-    }
-    userModel.findById(decoded.sub)
-    .then(user => res.status(201).json({
-        message:'JWT Refreshed',
-        token: `JWT ${generateToken(user)}`,
-        user:setUserInfo(user)
-      }))
-    .catch(error => res.status(401).json({
-      message: 'JWT Refresh Issue.',
-      error
-    }));
-  });
-  // if (user.role != 'admin') { 
-  //   return res.status(401).json({Error:"Access denied,you need to login as admin"})
-  // }else{ 
-  //   res.status(200).json({message:'hey welcome to my API',user:user})
-  // } 
+  const user =jwt.verify(token,secret);
+  if (user.role != 'admin') { 
+    return res.status(401).json({Error:"Access denied,you need to login as admin"})
+  }else{ 
+    res.status(200).json({message:'hey welcome to my API',user:user})
+  } 
 }
 
 
