@@ -9,7 +9,7 @@ const homepage =async (req,res)=>{
   const token = await req.headers['authorization'].split(' ')[1];
 
   const user =jwt.verify(token,secret);
-  if (user.role != 'admin') { 
+  if (user.user.role != 'admin') { 
     return res.status(401).json({Error:"Access denied,you need to login as admin"})
   }else{ 
     res.status(200).json({message:'hey welcome to my API',user:user})
